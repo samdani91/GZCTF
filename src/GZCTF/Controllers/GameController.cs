@@ -948,6 +948,40 @@ public class GameController(
     }
 
     /// <summary>
+    /// Get challenge solvers
+    /// </summary>
+    /// <remarks>
+    /// Retrieves challenge solvers; requires User permission and active team participation
+    /// </remarks>
+    /// <param name="id">Game ID</param>
+    /// <param name="challengeId">Challenge ID</param>
+    /// <param name="token"></param>
+    /// <response code="200">Successfully retrieved challenge solvers</response>
+    /// <response code="404">Game or challenge not found</response>
+    [RequireUser]
+    [HttpGet("{id:int}/Challenges/{challengeId:int}/Solvers")]
+    [ProducesResponseType(typeof(Blood[]), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(RequestResponse), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetChallengeSolvers([FromRoute] int id, [FromRoute] int challengeId,
+        CancellationToken token)
+    {
+        var context = await GetContextInfo(id, token: token);
+
+        if (context.Result is not null)
+            return context.Result;
+
+        var permission = await divisionRepository.GetPermission(context.Participation?.DivisionId, challengeId, token);
+
+        if (!permission.HasFlag(GamePermission.ViewChallenge))
+            return NotFound(new RequestResponse(localizer[nameof(Resources.Program.Challenge_NotFound)],
+                StatusCodes.Status404NotFound));
+
+        var solvers = await gameRepository.GetChallengeSolvers(id, challengeId, token);
+
+        return Ok(solvers);
+    }
+
+    /// <summary>
     /// Submits a flag
     /// </summary>
     /// <remarks>

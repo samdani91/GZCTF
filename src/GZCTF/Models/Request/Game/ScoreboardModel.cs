@@ -383,6 +383,11 @@ public partial class Blood
     public string Name { get; set; } = string.Empty;
 
     /// <summary>
+    /// Username of the solver
+    /// </summary>
+    public string? UserName { get; set; }
+
+    /// <summary>
     /// Team avatar
     /// </summary>
     public string? Avatar { get; set; } = string.Empty;

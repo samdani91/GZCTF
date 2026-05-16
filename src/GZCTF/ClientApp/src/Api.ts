@@ -1748,6 +1748,8 @@ export interface Blood {
    * @minLength 1
    */
   name: string;
+  /** Username of the solver */
+  userName?: string | null;
   /** Team avatar */
   avatar?: string | null;
   /**
@@ -4961,6 +4963,44 @@ export class Api<
       mutate<ChallengeDetailModel>(
         `/api/game/${id}/challenges/${challengeId}`,
         data,
+        options,
+      ),
+
+    /**
+     * @description Retrieves challenge solvers; requires User permission and active team participation
+     *
+     * @tags Game
+     * @name GameGetChallengeSolvers
+     * @summary Get challenge solvers
+     * @request GET:/api/game/{id}/challenges/{challengeId}/solvers
+     */
+    gameGetChallengeSolvers: (
+      id: number,
+      challengeId: number,
+      params: RequestParams = {},
+    ) =>
+      this.request<Blood[], RequestResponse>({
+        path: `/api/game/${id}/challenges/${challengeId}/solvers`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+    /**
+     * @description Retrieves challenge solvers; requires User permission and active team participation
+     *
+     * @tags Game
+     * @name GameGetChallengeSolvers
+     * @summary Get challenge solvers
+     * @request GET:/api/game/{id}/challenges/{challengeId}/solvers
+     */
+    useGameGetChallengeSolvers: (
+      id: number,
+      challengeId: number,
+      options?: SWRConfiguration,
+      doFetch: boolean = true,
+    ) =>
+      useSWR<Blood[], RequestResponse>(
+        doFetch ? `/api/game/${id}/challenges/${challengeId}/solvers` : null,
         options,
       ),
 

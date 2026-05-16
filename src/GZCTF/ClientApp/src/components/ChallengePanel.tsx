@@ -240,6 +240,7 @@ export const ChallengePanel: FC = () => {
               return (
                 <ChallengeCard
                   key={chal.id}
+                  gameId={numId}
                   challenge={chal}
                   iconMap={iconMap}
                   colorMap={colorMap}

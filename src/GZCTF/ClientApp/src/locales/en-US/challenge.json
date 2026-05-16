@@ -128,6 +128,9 @@
     "none": "None",
     "remote": "Remote Url"
   },
+  "label": {
+    "solvers": "Challenge Solvers"
+  },
   "notification": {
     "flag": {
       "accepted": {
@@ -173,6 +176,9 @@
         }
       }
     }
+  },
+  "placeholder": {
+    "no_solver": "This challenge has not been solved by any team"
   },
   "type": {
     "dynamic_attachment": {

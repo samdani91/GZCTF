@@ -128,6 +128,9 @@
     "none": "無附件",
     "remote": "遠程附件"
   },
+  "label": {
+    "solvers": "解題隊伍"
+  },
   "notification": {
     "flag": {
       "accepted": {
@@ -173,6 +176,9 @@
         }
       }
     }
+  },
+  "placeholder": {
+    "no_solver": "目前還沒有隊伍解出這道題"
   },
   "type": {
     "dynamic_attachment": {

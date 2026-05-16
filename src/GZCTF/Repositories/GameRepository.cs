@@ -208,6 +208,24 @@ public class GameRepository(
         return scoreboard;
     }
 
+    public async Task<Blood[]> GetChallengeSolvers(int gameId, int challengeId, CancellationToken token = default)
+    {
+        return await Context.FirstSolves
+            .AsNoTracking()
+            .Where(fs => fs.ChallengeId == challengeId && fs.Participation.GameId == gameId &&
+                         fs.Participation.Status == ParticipationStatus.Accepted)
+            .OrderBy(fs => fs.Submission.SubmitTimeUtc)
+            .Select(fs => new Blood
+            {
+                Id = fs.Participation.TeamId,
+                Name = fs.Participation.Team.Name,
+                UserName = fs.Submission.UserName,
+                Avatar = fs.Participation.Team.AvatarUrl,
+                SubmitTimeUtc = fs.Submission.SubmitTimeUtc
+            })
+            .ToArrayAsync(token);
+    }
+
     public async Task<TaskStatus> DeleteGame(Game game, CancellationToken token = default)
     {
         var trans = await BeginTransactionAsync(token);

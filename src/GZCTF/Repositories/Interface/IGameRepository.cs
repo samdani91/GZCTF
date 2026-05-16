@@ -179,5 +179,14 @@ public interface IGameRepository : IRepository
     /// <returns></returns>
     public Task<ScoreboardModel> GetScoreboardWithMembers(Game game, CancellationToken token = default);
 
+    /// <summary>
+    /// Get solvers for a specific challenge in a game
+    /// </summary>
+    /// <param name="gameId"></param>
+    /// <param name="challengeId"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
+    public Task<Blood[]> GetChallengeSolvers(int gameId, int challengeId, CancellationToken token = default);
+
     #endregion
 }
