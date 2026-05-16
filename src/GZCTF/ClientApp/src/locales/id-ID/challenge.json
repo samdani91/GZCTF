@@ -27,11 +27,13 @@
     "hardware": "Hardware security",
     "misc": "Miscellaneous",
     "mobile": "Mobile Security",
+    "networking": "Networking",
     "osint": "Open-source intelligence",
     "pentest": "Pentesting",
     "ppc": "Programming",
     "pwn": "Binary exploitation",
     "reverse": "Reverse engineering",
+    "warmup": "Pemanasan",
     "web": "Web security"
   },
   "content": {

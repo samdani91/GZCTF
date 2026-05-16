@@ -27,11 +27,13 @@
     "hardware": "Sécurité du matériel",
     "misc": "Divers",
     "mobile": "Sécurité mobile",
+    "networking": "Networking",
     "osint": "Renseignement open source",
     "pentest": "Test d'intrusion",
     "ppc": "Programmation",
     "pwn": "Exploitation binaire",
     "reverse": "Ingénierie inverse",
+    "warmup": "Échauffement",
     "web": "Sécurité web"
   },
   "content": {

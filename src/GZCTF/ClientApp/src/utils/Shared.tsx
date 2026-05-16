@@ -151,6 +151,16 @@ export const useChallengeCategoryLabelMap = () => {
           },
         ],
         [
+          ChallengeCategory.Networking,
+          {
+            desrc: t('challenge.category.networking'),
+            icon: mdiSecurityNetwork,
+            name: ChallengeCategory.Networking,
+            color: 'cyan',
+            colors: theme.colors['cyan'],
+          },
+        ],
+        [
           ChallengeCategory.Reverse,
           {
             desrc: t('challenge.category.reverse'),
@@ -248,6 +258,16 @@ export const useChallengeCategoryLabelMap = () => {
             name: ChallengeCategory.Pentest,
             color: 'grape',
             colors: theme.colors['grape'],
+          },
+        ],
+        [
+          ChallengeCategory.WarmUp,
+          {
+            desrc: t('challenge.category.warmup'),
+            icon: mdiLightbulbOnOutline,
+            name: ChallengeCategory.WarmUp,
+            color: 'lime',
+            colors: theme.colors['lime'],
           },
         ],
       ]),

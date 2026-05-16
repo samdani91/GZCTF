@@ -1,0 +1,67 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: gzctf-postgres
+    environment:
+      POSTGRES_DB: gzctf
+      POSTGRES_USER: gzctf
+      POSTGRES_PASSWORD: gzctf
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gzctf -d gzctf"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: gzctf-redis
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: src/GZCTF/Dockerfile
+    container_name: gzctf-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      XorKey: change-me-before-production
+      ADMIN_PASSWORD: sam123@SAM
+      ConnectionStrings__Database: Host=postgres;Port=5432;Database=gzctf;Username=gzctf;Password=gzctf
+      ConnectionStrings__RedisCache: redis:6379
+      ConnectionStrings__Storage: disk://path=/app/files
+      Telemetry__OpenTelemetry__Enable: "true"
+      Telemetry__Prometheus__Enable: "true"
+    ports:
+      - "8080:8080"
+      - "3000:3000"
+    volumes:
+      - gzctf-files:/app/files
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/healthz || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  gzctf-files:
+  postgres-data:
+  redis-data:

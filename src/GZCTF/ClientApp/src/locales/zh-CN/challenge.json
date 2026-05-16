@@ -27,11 +27,13 @@
     "hardware": "硬件安全",
     "misc": "安全杂项",
     "mobile": "移动安全",
+    "networking": "Networking",
     "osint": "开源情报",
     "pentest": "渗透测试",
     "ppc": "专业编程",
     "pwn": "二进制漏洞利用",
     "reverse": "逆向工程",
+    "warmup": "预热",
     "web": "网络安全"
   },
   "content": {

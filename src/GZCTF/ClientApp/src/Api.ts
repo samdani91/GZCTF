@@ -110,9 +110,11 @@ export enum ChallengeCategory {
   Hardware = "Hardware",
   Mobile = "Mobile",
   PPC = "PPC",
+  Networking = "Networking",
   AI = "AI",
   Pentest = "Pentest",
   OSINT = "OSINT",
+  WarmUp = "WarmUp",
 }
 
 export enum ParticipationStatus {

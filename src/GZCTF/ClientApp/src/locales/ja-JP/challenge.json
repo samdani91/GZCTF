@@ -27,11 +27,13 @@
     "hardware": "ハードウェアセキュリティ",
     "misc": "その他",
     "mobile": "モバイルセキュリティ",
+    "networking": "Networking",
     "osint": "オープンソース情報",
     "pentest": "ペネトレーションテスト",
     "ppc": "プログラミング",
     "pwn": "エクスプロイト",
     "reverse": "リバースエンジニアリング",
+    "warmup": "ウォームアップ",
     "web": "ウェブセキュリティ"
   },
   "content": {

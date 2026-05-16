@@ -27,11 +27,13 @@
     "hardware": "하드웨어 보안",
     "misc": "MISC",
     "mobile": "모바일 보안",
+    "networking": "Networking",
     "osint": "OSINT",
     "pentest": "Pentst",
     "ppc": "프로그래밍",
     "pwn": "PWN",
     "reverse": "Reversing",
+    "warmup": "워밍업",
     "web": "Web"
   },
   "content": {
