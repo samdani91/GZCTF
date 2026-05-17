@@ -31,7 +31,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: src/GZCTF/Dockerfile
+      dockerfile: src/GZCTF/Dockerfile.local
     container_name: gzctf-app
     depends_on:
       postgres:
@@ -51,6 +51,7 @@ services:
       - "8080:8080"
       - "3000:3000"
     volumes:
+      - .:/src
       - gzctf-files:/app/files
       - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped

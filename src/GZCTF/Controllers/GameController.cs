@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Mime;
@@ -442,6 +442,7 @@ public class GameController(
     /// </remarks>
     /// <param name="id">Game ID</param>
     /// <param name="type">Submission type</param>
+    /// <param name="challengeId">Challenge ID</param>
     /// <param name="count"></param>
     /// <param name="skip"></param>
     /// <param name="token"></param>
@@ -452,7 +453,8 @@ public class GameController(
     [ProducesResponseType(typeof(Submission[]), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(RequestResponse), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Submissions([FromRoute] int id, [FromQuery] AnswerResult? type = null,
-        [FromQuery][Range(0, 100)] int count = 100, [FromQuery] int skip = 0, CancellationToken token = default)
+        [FromQuery] int? challengeId = null, [FromQuery][Range(0, 100)] int count = 100, [FromQuery] int skip = 0,
+        CancellationToken token = default)
     {
         var game = await gameRepository.GetGameById(id, token);
 
@@ -462,6 +464,16 @@ public class GameController(
 
         if (DateTimeOffset.UtcNow < game.StartTimeUtc)
             return BadRequest(new RequestResponse(localizer[nameof(Resources.Program.Game_NotStarted)]));
+
+        if (challengeId is not null)
+        {
+            var challenge = await challengeRepository.GetChallenge(game.Id, challengeId.Value, token);
+            if (challenge is null || challenge.GameId != game.Id)
+                return NotFound(new RequestResponse(localizer[nameof(Resources.Program.Challenge_NotFound)],
+                    StatusCodes.Status404NotFound));
+
+            return Ok(await submissionRepository.GetSubmissions(challenge, type, count, skip, token));
+        }
 
         return Ok(await submissionRepository.GetSubmissions(game, type, count, skip, token));
     }
@@ -865,6 +877,7 @@ public class GameController(
     /// Downloads all submissions of the game; requires Monitor permission
     /// </remarks>
     /// <param name="id">Game ID</param>
+    /// <param name="challengeId">Challenge ID</param>
     /// <param name="excelHelper"></param>
     /// <param name="token"></param>
     /// <response code="200">Successfully downloaded all game submissions</response>
@@ -876,8 +889,8 @@ public class GameController(
     [ProducesResponseType(typeof(RequestResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(RequestResponse), StatusCodes.Status404NotFound)]
     [SuppressMessage("ReSharper", "StringLiteralTypo")]
-    public async Task<IActionResult> SubmissionSheet([FromRoute] int id, [FromServices] ExcelHelper excelHelper,
-        CancellationToken token = default)
+    public async Task<IActionResult> SubmissionSheet([FromRoute] int id, [FromQuery] int? challengeId,
+        [FromServices] ExcelHelper excelHelper, CancellationToken token = default)
     {
         var game = await gameRepository.GetGameById(id, token);
 
@@ -887,7 +900,11 @@ public class GameController(
         if (DateTimeOffset.UtcNow < game.StartTimeUtc)
             return BadRequest(new RequestResponse(localizer[nameof(Resources.Program.Game_NotStarted)]));
 
-        var submissions = await submissionRepository.GetSubmissions(game, count: 0, token: token);
+        var submissions = challengeId is not null
+            ? await submissionRepository.GetSubmissions(
+                await challengeRepository.GetChallenge(game.Id, challengeId.Value, token) ??
+                throw new Exception("Challenge not found"), count: 0, token: token)
+            : await submissionRepository.GetSubmissions(game, count: 0, token: token);
 
         var stream = excelHelper.GetSubmissionExcel(submissions);
         stream.Seek(0, SeekOrigin.Begin);

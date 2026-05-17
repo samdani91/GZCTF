@@ -5689,6 +5689,8 @@ export class Api<
       query?: {
         /** Submission type */
         type?: AnswerResult | null;
+        /** Challenge ID */
+        challengeId?: number | null;
         /**
          * @format int32
          * @min 0
@@ -5788,10 +5790,18 @@ export class Api<
      * @summary Downloads all submissions
      * @request GET:/api/game/{id}/submissionsheet
      */
-    gameSubmissionSheet: (id: number, params: RequestParams = {}) =>
+    gameSubmissionSheet: (
+      id: number,
+      query?: {
+        /** Challenge ID */
+        challengeId?: number | null;
+      },
+      params: RequestParams = {},
+    ) =>
       this.request<void, RequestResponse>({
         path: `/api/game/${id}/submissionsheet`,
         method: "GET",
+        query: query,
         ...params,
       }),
 

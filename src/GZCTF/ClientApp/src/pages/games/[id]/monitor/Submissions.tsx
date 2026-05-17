@@ -6,6 +6,7 @@ import {
   Paper,
   ScrollArea,
   SegmentedControl,
+  Select,
   Table,
   Text,
   Tooltip,
@@ -29,14 +30,14 @@ import { Icon } from '@mdi/react'
 import * as signalR from '@microsoft/signalr'
 import cx from 'clsx'
 import dayjs from 'dayjs'
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
 import { WithGameMonitor } from '@Components/WithGameMonitor'
 import { downloadBlob, handleAxiosError } from '@Utils/ApiHelper'
 import { useLanguage } from '@Utils/I18n'
 import { useDisplayInputStyles } from '@Utils/ThemeOverride'
-import { useGame } from '@Hooks/useGame'
+import { useGame, useGameScoreboard } from '@Hooks/useGame'
 import api, { AnswerResult, Submission } from '@Api'
 import tableClasses from '@Styles/Table.module.css'
 
@@ -74,9 +75,19 @@ const Submissions: FC = () => {
   const newSubmissions = useRef<Submission[]>([])
   const [submissions, setSubmissions] = useState<Submission[]>()
   const [type, setType] = useState<AnswerResult | 'All'>('All')
+  const [challengeId, setChallengeId] = useState<string | null>('All')
   const [disabled, setDisabled] = useState(false)
 
   const { game } = useGame(numId)
+  const { scoreboard } = useGameScoreboard(numId)
+
+  const challenges = useMemo(() => {
+    if (!scoreboard?.challenges) return []
+    return Object.values(scoreboard.challenges)
+      .flat()
+      .map((c) => ({ label: c.title, value: c.id.toString() }))
+      .sort((a, b) => a.label.localeCompare(b.label))
+  }, [scoreboard])
 
   const iconMap = AnswerResultIconMap(0.8)
   const { classes: inputClasses } = useDisplayInputStyles({ ff: 'monospace' })
@@ -95,6 +106,7 @@ const Submissions: FC = () => {
       try {
         const res = await api.game.gameSubmissions(numId, {
           type: type === 'All' ? undefined : type,
+          challengeId: challengeId === 'All' ? undefined : parseInt(challengeId ?? '-1'),
           count: ITEM_COUNT_PER_PAGE,
           skip: (activePage - 1) * ITEM_COUNT_PER_PAGE,
         })
@@ -114,7 +126,7 @@ const Submissions: FC = () => {
     if (activePage === 1) {
       newSubmissions.current = []
     }
-  }, [activePage, type, numId, t])
+  }, [activePage, type, challengeId, numId, t])
 
   useEffect(() => {
     if (game?.end && new Date() < new Date(game.end)) {
@@ -156,7 +168,11 @@ const Submissions: FC = () => {
     }
   }, [game, numId, t])
 
-  const filteredSubs = newSubmissions.current.filter((item) => type === 'All' || item.status === type)
+  const filteredSubs = newSubmissions.current.filter((item) => {
+    const typeMatch = type === 'All' || item.status === type
+    const challengeMatch = challengeId === 'All' || item.challenge === challenges.find((c) => c.value === challengeId)?.label
+    return typeMatch && challengeMatch
+  })
 
   const rows = [...(activePage === 1 ? filteredSubs : []), ...(submissions ?? [])].map((item, i) => (
     <Table.Tr
@@ -190,7 +206,9 @@ const Submissions: FC = () => {
 
   const onDownloadSubmissionSheet = () =>
     downloadBlob(
-      api.game.gameSubmissionSheet(numId, { format: 'blob' }),
+      api.game.gameSubmissionSheet(numId, {
+        challengeId: challengeId === 'All' ? undefined : parseInt(challengeId ?? '-1'),
+      }),
       setDisabled,
       t,
       `Submission_${numId}_${Date.now()}.xlsx`
@@ -199,27 +217,41 @@ const Submissions: FC = () => {
   return (
     <WithGameMonitor isLoading={!submissions}>
       <Group justify="space-between" w="100%">
-        <SegmentedControl
-          color={theme.primaryColor}
-          value={type}
-          bg="transparent"
-          onChange={(value) => {
-            setType(value as AnswerResult | 'All')
-            setPage(1)
-          }}
-          data={[
-            {
-              label: 'All',
-              value: 'All',
-            },
-            ...Object.entries(AnswerResult)
-              .map((role) => ({
-                value: role[1],
-                label: AnswerResultMap.get(role[1]),
-              }))
-              .filter((role) => role.value !== AnswerResult.FlagSubmitted),
-          ]}
-        />
+        <Group>
+          <SegmentedControl
+            color={theme.primaryColor}
+            value={type}
+            bg="transparent"
+            onChange={(value) => {
+              setType(value as AnswerResult | 'All')
+              setPage(1)
+            }}
+            data={[
+              {
+                label: 'All',
+                value: 'All',
+              },
+              ...Object.entries(AnswerResult)
+                .map((role) => ({
+                  value: role[1],
+                  label: AnswerResultMap.get(role[1]),
+                }))
+                .filter((role) => role.value !== AnswerResult.FlagSubmitted),
+            ]}
+          />
+          <Select
+            placeholder={t('common.label.challenge')}
+            value={challengeId}
+            onChange={(value) => {
+              setChallengeId(value)
+              setPage(1)
+            }}
+            data={[{ label: t('common.label.all'), value: 'All' }, ...challenges]}
+            searchable
+            clearable={false}
+            allowDeselect={false}
+          />
+        </Group>
         <Group justify="right">
           <Tooltip label={t('game.button.download.submissionsheet')} position="left">
             <ActionIcon disabled={disabled} size="lg" onClick={onDownloadSubmissionSheet}>
