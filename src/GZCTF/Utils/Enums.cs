@@ -341,20 +341,24 @@ public enum ChallengeCategory : byte
     Pwn = 2,
     Web = 3,
     Reverse = 4,
-    Blockchain = 5,
+    Networking = 10,
+    OSINT = 13,
+    Steganography = 15,
+    WarmUp = 14,
     Forensics = 6,
+
+    // Lower-priority categories
+    Blockchain = 5,
     Hardware = 7,
+    Pentest = 12,
+
     Mobile = 8,
     PPC = 9,
-    Networking = 10,
 
     // ReSharper disable once InconsistentNaming
     AI = 11,
-    Pentest = 12,
 
     // ReSharper disable once InconsistentNaming
-    OSINT = 13,
-    WarmUp = 14
 }
 
 /// <summary>

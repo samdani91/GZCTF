@@ -183,11 +183,11 @@ export const ChallengePanel: FC = () => {
         >
           <Tabs.List>
             <Tabs.Tab value={'All'} leftSection={<Icon path={mdiPuzzle} size={1} />}>
-              <Group justify="space-between" wrap="nowrap" gap={2}>
+              <Group justify="space-between" wrap="nowrap" gap="sm" w="100%">
                 <Text fz="sm" fw="bold">
                   All
                 </Text>
-                <Text fz="sm" fw="bold">
+                <Text fz="sm" fw="bold" miw="1.5rem" ta="right">
                   {allChallenges.length}
                 </Text>
               </Group>
@@ -196,11 +196,11 @@ export const ChallengePanel: FC = () => {
               const data = challengeCategoryLabelMap.get(tab as ChallengeCategory)!
               return (
                 <Tabs.Tab key={tab} value={tab} leftSection={<Icon path={data?.icon} size={1} />} color={data?.color}>
-                  <Group justify="space-between" wrap="nowrap" gap={2}>
+                  <Group justify="space-between" wrap="nowrap" gap="sm" w="100%">
                     <Text fz="sm" fw="bold">
                       {data?.name}
                     </Text>
-                    <Text fz="sm" fw="bold">
+                    <Text fz="sm" fw="bold" miw="1.5rem" ta="right">
                       {challenges && challenges[tab].length}
                     </Text>
                   </Group>

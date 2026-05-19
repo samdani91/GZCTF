@@ -105,16 +105,17 @@ export enum ChallengeCategory {
   Pwn = "Pwn",
   Web = "Web",
   Reverse = "Reverse",
-  Blockchain = "Blockchain",
+  Networking = "Networking",
+  OSINT = "OSINT",
+  Steganography = "Steganography",
+  WarmUp = "WarmUp",
   Forensics = "Forensics",
+  Blockchain = "Blockchain",
   Hardware = "Hardware",
+  Pentest = "Pentest",
   Mobile = "Mobile",
   PPC = "PPC",
-  Networking = "Networking",
   AI = "AI",
-  Pentest = "Pentest",
-  OSINT = "OSINT",
-  WarmUp = "WarmUp",
 }
 
 export enum ParticipationStatus {

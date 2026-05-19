@@ -36,6 +36,7 @@ import {
   mdiMatrix,
   mdiPlus,
   mdiRobotLoveOutline,
+  mdiImageOutline,
   mdiSearchWeb,
   mdiSecurityNetwork,
   mdiWeb,
@@ -131,6 +132,16 @@ export const useChallengeCategoryLabelMap = () => {
           },
         ],
         [
+          ChallengeCategory.Crypto,
+          {
+            desrc: t('challenge.category.crypto'),
+            icon: mdiMatrix,
+            name: ChallengeCategory.Crypto,
+            color: 'violet',
+            colors: theme.colors['violet'],
+          },
+        ],
+        [
           ChallengeCategory.Pwn,
           {
             desrc: t('challenge.category.pwn'),
@@ -151,16 +162,6 @@ export const useChallengeCategoryLabelMap = () => {
           },
         ],
         [
-          ChallengeCategory.Networking,
-          {
-            desrc: t('challenge.category.networking'),
-            icon: mdiSecurityNetwork,
-            name: ChallengeCategory.Networking,
-            color: 'cyan',
-            colors: theme.colors['cyan'],
-          },
-        ],
-        [
           ChallengeCategory.Reverse,
           {
             desrc: t('challenge.category.reverse'),
@@ -171,23 +172,43 @@ export const useChallengeCategoryLabelMap = () => {
           },
         ],
         [
-          ChallengeCategory.Crypto,
+          ChallengeCategory.Networking,
           {
-            desrc: t('challenge.category.crypto'),
-            icon: mdiMatrix,
-            name: ChallengeCategory.Crypto,
-            color: 'violet',
-            colors: theme.colors['violet'],
+            desrc: t('challenge.category.networking'),
+            icon: mdiSecurityNetwork,
+            name: ChallengeCategory.Networking,
+            color: 'cyan',
+            colors: theme.colors['cyan'],
           },
         ],
         [
-          ChallengeCategory.Blockchain,
+          ChallengeCategory.OSINT,
           {
-            desrc: t('challenge.category.blockchain'),
-            icon: mdiEthereum,
-            name: ChallengeCategory.Blockchain,
+            desrc: t('challenge.category.osint'),
+            icon: mdiSearchWeb,
+            name: ChallengeCategory.OSINT,
+            color: 'orange',
+            colors: theme.colors['orange'],
+          },
+        ],
+        [
+          ChallengeCategory.Steganography,
+          {
+            desrc: t('challenge.category.steganography'),
+            icon: mdiImageOutline,
+            name: ChallengeCategory.Steganography,
             color: 'green',
             colors: theme.colors['green'],
+          },
+        ],
+        [
+          ChallengeCategory.WarmUp,
+          {
+            desrc: t('challenge.category.warmup'),
+            icon: mdiLightbulbOnOutline,
+            name: ChallengeCategory.WarmUp,
+            color: 'lime',
+            colors: theme.colors['lime'],
           },
         ],
         [
@@ -201,6 +222,16 @@ export const useChallengeCategoryLabelMap = () => {
           },
         ],
         [
+          ChallengeCategory.Blockchain,
+          {
+            desrc: t('challenge.category.blockchain'),
+            icon: mdiEthereum,
+            name: ChallengeCategory.Blockchain,
+            color: 'green',
+            colors: theme.colors['green'],
+          },
+        ],
+        [
           ChallengeCategory.Hardware,
           {
             desrc: t('challenge.category.hardware'),
@@ -208,6 +239,16 @@ export const useChallengeCategoryLabelMap = () => {
             name: ChallengeCategory.Hardware,
             color: invert,
             colors: theme.colors[invert],
+          },
+        ],
+        [
+          ChallengeCategory.Pentest,
+          {
+            desrc: t('challenge.category.pentest'),
+            icon: mdiLanPending,
+            name: ChallengeCategory.Pentest,
+            color: 'grape',
+            colors: theme.colors['grape'],
           },
         ],
         [
@@ -236,36 +277,6 @@ export const useChallengeCategoryLabelMap = () => {
             desrc: t('challenge.category.ai'),
             icon: mdiRobotLoveOutline,
             name: ChallengeCategory.AI,
-            color: 'lime',
-            colors: theme.colors['lime'],
-          },
-        ],
-        [
-          ChallengeCategory.OSINT,
-          {
-            desrc: t('challenge.category.osint'),
-            icon: mdiSearchWeb,
-            name: ChallengeCategory.OSINT,
-            color: 'orange',
-            colors: theme.colors['orange'],
-          },
-        ],
-        [
-          ChallengeCategory.Pentest,
-          {
-            desrc: t('challenge.category.pentest'),
-            icon: mdiLanPending,
-            name: ChallengeCategory.Pentest,
-            color: 'grape',
-            colors: theme.colors['grape'],
-          },
-        ],
-        [
-          ChallengeCategory.WarmUp,
-          {
-            desrc: t('challenge.category.warmup'),
-            icon: mdiLightbulbOnOutline,
-            name: ChallengeCategory.WarmUp,
             color: 'lime',
             colors: theme.colors['lime'],
           },

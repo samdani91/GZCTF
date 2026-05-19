@@ -32,6 +32,7 @@
     "pentest": "Test d'intrusion",
     "ppc": "Programmation",
     "pwn": "Exploitation binaire",
+    "steganography": "Stéganographie",
     "reverse": "Ingénierie inverse",
     "warmup": "Échauffement",
     "web": "Sécurité web"
